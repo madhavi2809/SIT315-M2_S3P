@@ -27,10 +27,11 @@ int main() {
 
     int total = 0; // Initialize total outside the parallel region
 
-    // Experiment with different scheduling techniques and chunk sizes
-    #pragma omp parallel for default(none) shared(v1, v2, v3, size) private(total) schedule(dynamic, 1000)
+    // Compute the total sum using the reduction clause
+    #pragma omp parallel for default(none) shared(v1, v2, v3, size) reduction(+:total)
     for (int i = 0; i < size; i++) {
         v3[i] = v1[i] + v2[i];
+        total += v3[i];
     }
 
     auto stop = high_resolution_clock::now();
